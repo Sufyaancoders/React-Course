@@ -1,7 +1,6 @@
 import React from 'react';
-import { FcLike } from "react-icons/fc";
-import { 
-    Card as MuiCard,
+import { Favorite, FavoriteBorder } from '@mui/icons-material'
+ import {   Card as MuiCard,
     CardContent,
     CardMedia,
     Typography,
@@ -20,7 +19,19 @@ const StyledCard = styled(MuiCard)({
     }
 });
 
-const Card = ({item}) => {    
+const Card = (props) => {   
+    let item = props.item;  
+    let liked = props.liked;
+    let setLiked = props.setLiked;
+
+    function clickhandler() {
+        if (liked.includes(item.id)) {
+            setLiked((prev) => prev.filter((id) => id !== item.id));
+        } else {
+            setLiked((prev) => [...prev, item.id]);
+        }
+    }
+
     return (
         <StyledCard>
             <Box sx={{ position: 'relative' }}>
@@ -31,7 +42,8 @@ const Card = ({item}) => {
                     alt={item.title}
                     sx={{ objectFit: 'contain', padding: '1rem' }}
                 />
-                <IconButton
+                <IconButton 
+                    onClick={clickhandler}
                     sx={{
                         position: 'absolute',
                         top: 8,
@@ -40,7 +52,11 @@ const Card = ({item}) => {
                         '&:hover': { bgcolor: 'white' }
                     }}
                 >
-                    <FcLike fontSize="1.2rem"/>
+                    {liked.includes(item.id) ? (
+                        <Favorite sx={{ color: 'red' }} />
+                    ) : (
+                        <FavoriteBorder sx={{ color: '#ccc' }} />
+                    )}
                 </IconButton>
             </Box>
             <CardContent>
@@ -82,5 +98,6 @@ const Card = ({item}) => {
         </StyledCard>
     );
 }
+
 
 export default Card;
